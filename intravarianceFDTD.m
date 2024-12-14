@@ -27,7 +27,7 @@ numUsers = 10; % Number of users
 featureTypes = {'FreqD_FDay', 'TimeD_MDay'}; % Feature sets to compare
 results = struct();
 
-% Step 6: Loop through all users and calculate intra-variances and CVs
+% Step 6: Loop through all users and calculate intra-variances, CVs, and standard deviations
 for userIdx = 1:numUsers
     userID = sprintf('U%02d', userIdx); % User ID in the format U01, U02, ..., U10
     
@@ -63,6 +63,8 @@ for userIdx = 1:numUsers
         % Store results for the user
         results.(userID).variance_combined_FreqD_TimeD = variance_combined_FreqD_TimeD;
         results.(userID).variance_combined_MDay_TimeD = variance_combined_MDay_TimeD;
+        results.(userID).std_combined_FreqD_TimeD = std_combined_FreqD_TimeD;
+        results.(userID).std_combined_MDay_TimeD = std_combined_MDay_TimeD;
         results.(userID).cv_combined_FreqD_TimeD = cv_combined_FreqD_TimeD;
         results.(userID).cv_combined_MDay_TimeD = cv_combined_MDay_TimeD;
 
@@ -74,7 +76,7 @@ for userIdx = 1:numUsers
         figure;
         
         % Subplot 1: Variance
-        subplot(2, 1, 1); % First subplot for variance
+        subplot(3, 1, 1); % First subplot for variance
         hold on;
         plot(featureIndices, variance_combined_FreqD_TimeD, '-o', 'DisplayName', 'Combined FreqD_FDay and TimeD_MDay Variance');
         plot(featureIndices, variance_combined_MDay_TimeD, '-x', 'DisplayName', 'Combined FreqD_MDay and TimeD_MDay Variance');
@@ -86,7 +88,7 @@ for userIdx = 1:numUsers
         grid on;
 
         % Subplot 2: Coefficient of Variation
-        subplot(2, 1, 2); % Second subplot for CV
+        subplot(3, 1, 2); % Second subplot for CV
         hold on;
         plot(featureIndices, cv_combined_FreqD_TimeD, '-o', 'DisplayName', 'Combined FreqD_FDay and TimeD_MDay CV');
         plot(featureIndices, cv_combined_MDay_TimeD, '-x', 'DisplayName', 'Combined FreqD_MDay and TimeD_MDay CV');
@@ -94,6 +96,18 @@ for userIdx = 1:numUsers
         title(sprintf('User %02d: Combined Coefficient of Variation (CV, FreqD and TimeD)', userIdx));
         xlabel('Feature Index');
         ylabel('CV');
+        legend('show');
+        grid on;
+
+        % Subplot 3: Standard Deviation
+        subplot(3, 1, 3); % Third subplot for standard deviation
+        hold on;
+        plot(featureIndices, std_combined_FreqD_TimeD, '-o', 'DisplayName', 'Combined FreqD_FDay and TimeD_MDay Std Dev');
+        plot(featureIndices, std_combined_MDay_TimeD, '-x', 'DisplayName', 'Combined FreqD_MDay and TimeD_MDay Std Dev');
+        hold off;
+        title(sprintf('User %02d: Combined Standard Deviations (FreqD and TimeD)', userIdx));
+        xlabel('Feature Index');
+        ylabel('Standard Deviation');
         legend('show');
         grid on;
     else

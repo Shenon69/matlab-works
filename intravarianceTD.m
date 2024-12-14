@@ -56,6 +56,8 @@ for userIdx = 1:numUsers
         % Store results for the user
         results.(userID).variance_FDay = variance_FDay;
         results.(userID).variance_MDay = variance_MDay;
+        results.(userID).std_FDay = std_FDay;
+        results.(userID).std_MDay = std_MDay;
         results.(userID).cv_FDay = cv_FDay;
         results.(userID).cv_MDay = cv_MDay;
 
@@ -67,7 +69,7 @@ for userIdx = 1:numUsers
         figure;
         
         % Subplot 1: Variance
-        subplot(2, 1, 1); % First subplot for variance
+        subplot(3, 1, 1); % First subplot for variance
         hold on;
         plot(featureIndices, variance_FDay, '-o', 'DisplayName', 'FDay Variance');
         plot(featureIndices, variance_MDay, '-x', 'DisplayName', 'MDay Variance');
@@ -79,7 +81,7 @@ for userIdx = 1:numUsers
         grid on;
 
         % Subplot 2: Coefficient of Variation
-        subplot(2, 1, 2); % Second subplot for CV
+        subplot(3, 1, 2); % Second subplot for CV
         hold on;
         plot(featureIndices, cv_FDay, '-o', 'DisplayName', 'FDay CV');
         plot(featureIndices, cv_MDay, '-x', 'DisplayName', 'MDay CV');
@@ -87,6 +89,18 @@ for userIdx = 1:numUsers
         title(sprintf('User %02d: Coefficient of Variation (CV, TimeD)', userIdx));
         xlabel('Feature Index');
         ylabel('CV');
+        legend('show');
+        grid on;
+
+        % Subplot 3: Standard Deviation
+        subplot(3, 1, 3); % Third subplot for standard deviation
+        hold on;
+        plot(featureIndices, std_FDay, '-o', 'DisplayName', 'FDay STD');
+        plot(featureIndices, std_MDay, '-x', 'DisplayName', 'MDay STD');
+        hold off;
+        title(sprintf('User %02d: Standard Deviations (TimeD)', userIdx));
+        xlabel('Feature Index');
+        ylabel('Standard Deviation');
         legend('show');
         grid on;
     else
