@@ -30,8 +30,9 @@ numSamples = 36;   % Number of samples
 userVariance = zeros(numUsers, numFeatures);  % Preallocate for variances (88 features)
 userMean = zeros(numUsers, numFeatures);  % Preallocate for means (88 features)
 userCV = zeros(numUsers, numFeatures);  % Preallocate for CVs (88 features)
+userSTD = zeros(numUsers, numFeatures);  % Preallocate for standard deviations (88 features)
 
-% Step 6: Loop through all users and calculate intra-variances, means, and CVs
+% Step 6: Loop through all users and calculate intra-variances, means, CVs, and STDs
 for userIdx = 1:numUsers
     userID = sprintf('U%02d', userIdx); % User ID in the format U01, U02, ..., U10
     
@@ -56,6 +57,7 @@ for userIdx = 1:numUsers
         
         % Calculate standard deviations for the user's TimeD_FDay data
         std_TimeD_FDay = std(TimeD_FDay_data, 0, 1); % Standard deviation across columns (features)
+        userSTD(userIdx, :) = std_TimeD_FDay;
         
         % Calculate coefficients of variation (CVs) for the user's TimeD_FDay data
         cv_TimeD_FDay = std_TimeD_FDay ./ mean_TimeD_FDay;
@@ -103,5 +105,18 @@ hold off;
 title('Coefficient of Variation (CV) of TimeD_FDay for All Users');
 xlabel('Feature Index');
 ylabel('CV');
+legend('show');
+grid on;
+
+% Figure 4: Standard Deviation of TimeD_FDay data for all 10 users
+figure;
+hold on;
+for userIdx = 1:numUsers
+    plot(1:numFeatures, userSTD(userIdx, :), 'DisplayName', sprintf('User %02d', userIdx));
+end
+hold off;
+title('Standard Deviation of TimeD_FDay for All Users');
+xlabel('Feature Index');
+ylabel('Standard Deviation');
 legend('show');
 grid on;

@@ -28,6 +28,7 @@ numFeatures = 43;  % Number of features in FreqD_FDay
 userVariance = zeros(numUsers, numFeatures);  % Preallocate for variances (43 features)
 userMean = zeros(numUsers, numFeatures);  % Preallocate for means (43 features)
 userCV = zeros(numUsers, numFeatures);  % Preallocate for CVs (43 features)
+userSTD = zeros(numUsers, numFeatures);  % Preallocate for standard deviations (43 features)
 
 % Step 6: Loop through all users and calculate intra-variances, means, and CVs
 for userIdx = 1:numUsers
@@ -54,6 +55,7 @@ for userIdx = 1:numUsers
         
         % Calculate standard deviations for the user's FreqD_FDay data
         std_FDay = std(FDay_data, 0, 1); % Standard deviation across columns (features)
+        userSTD(userIdx, :) = std_FDay;
         
         % Calculate coefficients of variation (CVs) for the user's FreqD_FDay data
         cv_FDay = std_FDay ./ mean_FDay;
@@ -101,5 +103,18 @@ hold off;
 title('Coefficient of Variation (CV) of FreqD_FDay for All Users');
 xlabel('Feature Index');
 ylabel('CV');
+legend('show');
+grid on;
+
+% Figure 4: Standard Deviation (STD) of FreqD_FDay data for all 10 users
+figure;
+hold on;
+for userIdx = 1:numUsers
+    plot(1:numFeatures, userSTD(userIdx, :), 'DisplayName', sprintf('User %02d', userIdx));
+end
+hold off;
+title('Standard Deviation (STD) of FreqD_FDay for All Users');
+xlabel('Feature Index');
+ylabel('Standard Deviation');
 legend('show');
 grid on;
